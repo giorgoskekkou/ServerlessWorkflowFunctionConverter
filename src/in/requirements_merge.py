@@ -3,6 +3,8 @@ import os
 
 # File imports
 
+in_folder = './benchmarks/'
+
 # Functions
 def all_strings_same(strings):
     return all(s == strings[0] for s in strings)
@@ -13,13 +15,13 @@ def main():
     requirements = {}
     
     
-    for name in os.listdir('.'):
-        if os.path.isdir(name):
+    for name in os.listdir(in_folder):
+        if os.path.isdir(in_folder + name):
             if name not in ['__pycache__', '.git', 'venv', 'build', 'dist', 'requirements', 'requirements.txt', 'requirements_merge.py', 'requirements_merge.sh', 'requirements_merge.bat']:
                 directories.append(name)
 
-                if os.path.exists(name + '/requirements.txt'):
-                    with open(name + '/requirements.txt', 'r') as f:
+                if os.path.exists(in_folder + name + '/requirements.txt'):
+                    with open(in_folder + name + '/requirements.txt', 'r') as f:
                         # requirements[name] = f.read()
                         requirements[name] = []
                         for line in f:

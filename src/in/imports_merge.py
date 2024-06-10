@@ -1,18 +1,20 @@
 # Library imports
 import os
 
+in_folder = './benchmarks/'
+
 def main():
     directories = []
     imports = []
     from_imports = {}
 
-    for name in os.listdir('.'):
-        if os.path.isdir(name):
+    for name in os.listdir(in_folder):
+        if os.path.isdir(in_folder + name):
             if name not in ['__pycache__', '.git', 'venv', 'build', 'dist', 'requirements', 'requirements.txt', 'requirements_merge.py', 'requirements_merge.sh', 'requirements_merge.bat']:
                 directories.append(name)
 
-                if os.path.exists(name + '/func.py'):
-                    with open(name + '/func.py', 'r') as f:
+                if os.path.exists(in_folder + name + '/func.py'):
+                    with open(in_folder + name + '/func.py', 'r') as f:
                         for line in f:
                             line = line.strip('\n')
                             if line.startswith('import'):

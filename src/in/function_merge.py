@@ -4,14 +4,14 @@ import os
 # File imports
 # from lambda_function import Node, LambdaFunctionCode    # check later if node is necessary
 
-in_folder = './in/'
+in_folder = './benchmarks/'
 dictionary = {}
 
 # Print the names of the directories in the current directory
 lambda_functions = []
 print('Subdirectories:')
-for name in os.listdir('.'):
-    if os.path.isdir(name):
+for name in os.listdir(in_folder):
+    if os.path.isdir(os.path.join(in_folder, name)):
         dictionary[name] = {}
         lambda_functions.append(name)
         print(name)
@@ -20,7 +20,7 @@ print()
 # Print the name of the files in each subdirectory
 for lambda_function in lambda_functions:
     print(f'Files in {lambda_function}:')
-    for name in os.listdir(lambda_function):
+    for name in os.listdir(os.path.join(in_folder, lambda_function)):
         dictionary[lambda_function][name] = []
         print(f'  {name}')
     print()
@@ -30,11 +30,11 @@ for lambda_function in lambda_functions:
 function_names = [] 
 for lambda_function in lambda_functions:
     print(f'Files in {lambda_function}:')
-    for name in os.listdir(lambda_function):
+    for name in os.listdir(os.path.join(in_folder, lambda_function)):
         # find the func.py file
         if name == 'func.py':
             print(f'  {name}')
-            with open(f'{lambda_function}/{name}') as f:
+            with open(f'{in_folder}{lambda_function}/{name}') as f:
                 code = f.read().split('\n')
 
                 for line in code:
@@ -65,7 +65,7 @@ eof_flag = False
 while not eof_flag:
     print(f'Starting function: {starting_function}')
     if change_file_flag:
-        with open(f'{starting_function}/func.py') as f:
+        with open(f'{in_folder}{starting_function}/func.py') as f:
             code = f.read().split('\n')
             change_file_flag = False
 

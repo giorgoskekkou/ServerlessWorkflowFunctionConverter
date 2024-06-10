@@ -2,6 +2,7 @@ import os
 import yaml
 import datetime
 
+in_folder = './benchmarks/'
 
 def common_prefix(strings):
     return os.path.commonprefix(strings)
@@ -36,13 +37,13 @@ def main():
     directories = []
     yaml_files = {}
 
-    for name in os.listdir('.'):
-        if os.path.isdir(name):
+    for name in os.listdir(in_folder):
+        if os.path.isdir(in_folder + name):
             if name not in ['__pycache__', '.git', 'venv', 'build', 'dist', 'requirements', 'requirements.txt', 'requirements_merge.py', 'requirements_merge.sh', 'requirements_merge.bat', 'target']:
                 directories.append(name)
 
-                if os.path.exists(name + '/func.yaml'):
-                    data = parse_yaml(name + '/func.yaml')
+                if os.path.exists(in_folder + name + '/func.yaml'):
+                    data = parse_yaml(in_folder + name + '/func.yaml')
                     yaml_files[name] = data
                 
                 #     with open(name + '/func.yaml', 'r') as f:
@@ -92,7 +93,7 @@ def main():
     print(merged_yaml)
     print()
 
-    with open('temp.yaml', 'w') as file:
-        yaml.dump(merged_yaml, file, default_flow_style=False, sort_keys=False)
+    # with open('temp.yaml', 'w') as file:
+    #     yaml.dump(merged_yaml, file, default_flow_style=False, sort_keys=False)
 
 main()

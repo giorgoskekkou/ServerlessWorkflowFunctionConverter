@@ -3,8 +3,11 @@ import os
 
 # File imports
 # from lambda_function import Node, LambdaFunctionCode    # check later if node is necessary
-in_folder = './in/'
+in_folder = './benchmarks/'
 dictionary = {}
+
+# print the current directory
+print('Current directory:', os.getcwd())
 
 # Print the names of the directories in the current directory
 lamda_functions = []
