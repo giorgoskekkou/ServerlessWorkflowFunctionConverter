@@ -1,4 +1,10 @@
-PYTHON = python3
+# PYTHON = python3
+
+ifeq ($(OS),Windows_NT)
+    PYTHON = python
+else
+    PYTHON = python3
+endif
 
 main:
 	$(PYTHON) src/main.py
@@ -14,3 +20,6 @@ yaml:
 
 function:
 	$(PYTHON) src/in/function_merge.py
+
+count:
+	./count_lines.sh

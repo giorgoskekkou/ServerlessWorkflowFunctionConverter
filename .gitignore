@@ -2,7 +2,9 @@
 
 # Directories
 __pycache__
-in
+# remove later
+video-*
+# in
 
 # Files
 project_structure.txt

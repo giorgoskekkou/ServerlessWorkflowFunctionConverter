@@ -7,6 +7,8 @@ import os
 in_folder = './benchmarks/'
 dictionary = {}
 
+functions_dictionary = {}
+
 # Print the names of the directories in the current directory
 lambda_functions = []
 print('Subdirectories:')
@@ -37,20 +39,35 @@ for lambda_function in lambda_functions:
             with open(f'{in_folder}{lambda_function}/{name}') as f:
                 code = f.read().split('\n')
 
-                for line in code:
+                previous_function = ''
+                new_func_name = ''
+                for index, line in enumerate(code):
                     if 'def' in line and 'main' not in line:
+                        previous_function = new_func_name 
                         new_func_name = line.split(' ')[1].split('(')[0]
                         if new_func_name not in function_names:
                             dictionary[lambda_function][name].append(new_func_name)
-                            function_names.append(new_func_name)                
+                            function_names.append(new_func_name)
+
+                            functions_dictionary[new_func_name] = {
+                                'directory': lambda_function,
+                                'start': index + 1,
+                                'end': -1,  # still unknown
+                            }
+                            if previous_function != '':
+                                functions_dictionary[previous_function]['end'] = index - 1
                         else:
                             print(f'Function {new_func_name} already exists')
 print("Function names:")
 print(function_names)
-
+print()
 
 print("Dictionary:")
 print(dictionary)
+print()
+
+print("Functions dictionary:")
+print(functions_dictionary)
 print()
 
 # set starting function
@@ -72,7 +89,7 @@ while not eof_flag:
             for line in code:
                 if 'import' in line.split():
                     continue
-                print(line)
+                # print(line) # for debugging 
                 buffer += line + '\n'
                 if 'requests.post' in line:
                     newly_called_function = line.split('(')[1].split(',')[0].lower().replace('_', '-')
@@ -95,7 +112,7 @@ while not eof_flag:
             
 print("Buffer:")
 print("-------------------")
-print(buffer)
+# print(buffer)
 print("-------------------")
 
 # OLD CODE
