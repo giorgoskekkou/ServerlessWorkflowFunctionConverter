@@ -1,1 +1,8 @@
+# File types
+
+# Directories
+__pycache__
+in
+
+# Files
 project_structure.txt
