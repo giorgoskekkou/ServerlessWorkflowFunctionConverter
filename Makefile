@@ -21,5 +21,8 @@ yaml:
 function:
 	$(PYTHON) src/in/function_merge.py
 
+func_call_st:
+	$(PYTHON) src/in/function_call_stack.py
+
 count:
 	./count_lines.sh

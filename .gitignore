@@ -6,5 +6,11 @@ __pycache__
 video-*
 # in
 
+
+# Patters
+*temp*
+*tmp*
+
+
 # Files
 project_structure.txt
