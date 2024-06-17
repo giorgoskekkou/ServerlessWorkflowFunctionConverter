@@ -24,5 +24,9 @@ function:
 func_call_st:
 	$(PYTHON) src/in/function_call_stack.py
 
+tree:
+	$(PYTHON) src/in/tree.py
+
 count:
 	./count_lines.sh
+
