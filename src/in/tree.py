@@ -49,11 +49,11 @@ def is_function_call(line, function_names):
         tokenized_line = tokenize_line(line)
         # print("Tokenized line: ", tokenized_line)
         if name in tokenized_line:
-            print("FOUND: ", name)
+            # print("FOUND: ", name)
         # if name in stripped_line:
             function_matches.append(name)
             # return name
-    print("Function matches: ", remove_duplicates(function_matches))
+    # print("Function matches: ", remove_duplicates(function_matches))
     return remove_duplicates(function_matches)
     # return function_matches
     # return list(set(function_matches))
@@ -103,8 +103,8 @@ for lambda_function in lambda_functions:
                     # print(line)
                     if line.strip().startswith('#'):
                         continue
-                    print("TEMP: ", el['function_name'])
-                    print(hierarchical_functions[lambda_function])
+                    # print("TEMP: ", el['function_name'])
+                    # print(hierarchical_functions[lambda_function])  # see later
                     function_matches = is_function_call(line, hierarchical_functions[lambda_function])
                     # function_matches = is_function_call(line, function_names)
                     # if function_name and function_name != el['function_name']:
@@ -120,9 +120,45 @@ for lambda_function in lambda_functions:
                         # print(f"Function call: {function_name}")
                         # function_calls.append({'src': el['function_name'], 'dst': function_name , 'lambda': lambda_function, 'line': index + 1})
 
+print(function_calls)
+# for key in function_calls:
+#     print(key)
 
-for key in function_calls:
-    print(key)
+# TEST CODE to replace the function definition and calls with new function names
+
+for lambda_function in lambda_functions:
+    buffer = ""
+    with open(f'{in_folder}{lambda_function}/func.py') as f:
+        code = f.read().split('\n')
+        
+        print(f"Lambda function: {lambda_function}")
+        # for line in code:
+            # print(line)
+        # print()
+        for i in range(len(code)):
+            line = code[i]
+            if 'import' in line.split():
+                continue
+            
+            for function_call in function_calls:
+                if function_call['line'] == i + 1 and function_call['lambda'] == lambda_function:
+                    new_func_name = f"{function_call['lambda'].replace('-', '_')}_{function_call['dst']}"
+                    line = line.replace(function_call['dst'], new_func_name)
+                    print(line)
+            
+            for key, value in function_dictionary.items():
+                if value['start'] == i + 1:
+                    # new_func_name = key.replace('-', '_')
+                    line = line.replace(value['function_name'], key.replace('-', '_'))
+                    print(line)
+            
+            buffer += line + '\n'
+
+    # TEMP print buffer
+    print(buffer)
+             
+
+# IDK    
 #     # iterate to get the function calls
 #     for line in lines:
 #         if line.strip().startswith('#'):    # skip comments

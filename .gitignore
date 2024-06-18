@@ -1,7 +1,10 @@
 # File types
+*.json
 
 # Directories
 __pycache__
+jsons
+
 # remove later
 video-*
 # in
