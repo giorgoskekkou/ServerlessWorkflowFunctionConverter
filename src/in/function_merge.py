@@ -3,6 +3,7 @@ import os
 
 # File imports
 # from lambda_function import Node, LambdaFunctionCode    # check later if node is necessary
+
 def get_function_name(full_name):
     parts = full_name.split('_')
     without_first_prefix = parts[1:]

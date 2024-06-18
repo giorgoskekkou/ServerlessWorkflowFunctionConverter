@@ -2,6 +2,7 @@
 import os
 
 # File imports
+from shared_variables import ignored_folders
 
 in_folder = './benchmarks/'
 
@@ -17,7 +18,7 @@ def main():
     
     for name in os.listdir(in_folder):
         if os.path.isdir(in_folder + name):
-            if name not in ['__pycache__', '.git', 'venv', 'build', 'dist', 'requirements', 'requirements.txt', 'requirements_merge.py', 'requirements_merge.sh', 'requirements_merge.bat']:
+            if name not in ignored_folders:
                 directories.append(name)
 
                 if os.path.exists(in_folder + name + '/requirements.txt'):

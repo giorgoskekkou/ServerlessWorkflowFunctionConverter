@@ -21,8 +21,8 @@ yaml:
 function:
 	$(PYTHON) src/in/function_merge.py
 
-func_call_st:
-	$(PYTHON) src/in/function_call_stack.py
+# func_call_st:
+# 	$(PYTHON) src/in/function_call_stack.py
 
 tree:
 	$(PYTHON) src/in/tree.py
