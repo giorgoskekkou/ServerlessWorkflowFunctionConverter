@@ -1,9 +1,22 @@
+# MODULES
+- [X] YAML merger 
+- [X] Import merger
+- [X] Requirements merger
+- [ ] Post Request replacer
+- [ ] Function merger
+
+<br>
+<br>
+<br>
+
+
 # Merge requirements
 
 ## Handle conflicts:
 - same depedancy with version and without -> wins the one with version ? IDK
 - same depedancy wih 2 different versions -> wins the one with the newer version? NO the earliest ?
-- > Deal with mulitple versions
+- **Deal with mulitple versions**
+
 <br>
 <br>
 <br>
@@ -21,5 +34,4 @@
 
 
 # Other
-- Why is there 2 different locations for requirements -> ignore the func.yaml
-- Check monitor hdmi or dp
+- Why is there 2 different locations for requirements -> **Just Ignore utils/tracing/.**

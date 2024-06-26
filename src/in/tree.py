@@ -1,14 +1,16 @@
 from function_merge import main as function_merge
+from request_converter import conv
 
 in_folder = './benchmarks/'
 
+'''
 # class Node:
 #     def __init__(self, line, function_name):
 #         self.line = line
 #         self.function_name = function_name
 #         self.children = []
 #         self.parent = None
-
+# 
 #     def add_child(self, child):
 #         self.children.append(child)
 
@@ -18,6 +20,8 @@ in_folder = './benchmarks/'
 #         for child in self.children:
 #             print("Child: ", child.function_name)
 #             child.print_tree(level + 1)
+'''
+
 def tokenize_line(line):
     tokens = []
     buffer = ''
@@ -39,6 +43,17 @@ def remove_duplicates(l):
     return new_l
     # return list(set(l))
 
+def is_post_request(line, lambda_functions):
+    matches = []
+    for lambda_function in lambda_functions:
+        pattern = lambda_function.replace('-', '_').upper()
+        print(pattern)
+        # if lambda_function in line:
+        if pattern in line:
+            matches.append(lambda_function)
+            print("MATCH: ", lambda_function)
+    return matches
+
 def is_function_call(line, function_names):
     # print("FUNCTION NAMES: ", function_names)
     function_matches = []
@@ -48,7 +63,7 @@ def is_function_call(line, function_names):
         # Tokenize the line
         tokenized_line = tokenize_line(line)
         # print("Tokenized line: ", tokenized_line)
-        if name in tokenized_line:
+        if name in tokenized_line and ('.' + name) not in stripped_line:
             # print("FOUND: ", name)
         # if name in stripped_line:
             function_matches.append(name)
@@ -97,7 +112,7 @@ for lambda_function in lambda_functions:
             if el['directory'] == lambda_function:
                 start = el['start']
                 end = el['end']
-                print(f"Function: {el['function_name']} at {start} - {end} from file: {lambda_function}")
+                # print(f"Function: {el['function_name']} at {start} - {end} from file: {lambda_function}")
                 for index in range(start - 1, end):
                     line = code[index]
                     # print(line)
@@ -113,7 +128,7 @@ for lambda_function in lambda_functions:
 
                         for i in range(len(function_matches)):
                             if function_matches[i] != el['function_name']:
-                                print(f"Function call: {function_matches[i]}")
+                                print(f"Function call: {el['function_name']} -> {function_matches[i]}")
                                 function_calls.append({'src': el['function_name'], 'dst': function_matches[i] , 'lambda': lambda_function, 'line': index + 1})
                                 # print(f"Function call: {function_names[i]}")
                                 # function_calls.append({'src': el['function_name'], 'dst': function_names[i] , 'lambda': lambda_function, 'line': index + 1})
@@ -125,9 +140,16 @@ print(function_calls)
 #     print(key)
 
 # TEST CODE to replace the function definition and calls with new function names
+buffer = ""
+
+print()
+print("Lambda functions: ", lambda_functions)
+print()
+
+lambda_functions = ['video-streaming', 'video-decoder', 'video-recog']
 
 for lambda_function in lambda_functions:
-    buffer = ""
+    # buffer = ""
     with open(f'{in_folder}{lambda_function}/func.py') as f:
         code = f.read().split('\n')
         
@@ -140,23 +162,40 @@ for lambda_function in lambda_functions:
             if 'import' in line.split():
                 continue
             
+            # add prefix to the function calls 
             for function_call in function_calls:
                 if function_call['line'] == i + 1 and function_call['lambda'] == lambda_function:
                     new_func_name = f"{function_call['lambda'].replace('-', '_')}_{function_call['dst']}"
                     line = line.replace(function_call['dst'], new_func_name)
                     print(line)
             
+            # add prefix to the function definitions
             for key, value in function_dictionary.items():
                 if value['start'] == i + 1:
                     # new_func_name = key.replace('-', '_')
                     line = line.replace(value['function_name'], key.replace('-', '_'))
                     print(line)
+
+            # find the lambda function post request call
+            if 'requests.post' in line:
+                print("FOUND POST REQUEST on line: ", line)
+                lambda_function_matches =  is_post_request(line, lambda_functions)
+                print(lambda_function_matches)
+                print()
+                print("Call conv")
+                conv(lambda_functions, line)
+                # print('requests.post')
             
             buffer += line + '\n'
 
-    # TEMP print buffer
-    print(buffer)
-             
+# TEMP print buffer
+# print("THIS IS THE BUFFER: ")
+# print(buffer)
+
+with open('temp.txt', 'w') as f:
+    f.write(buffer)
+
+            
 
 # IDK    
 #     # iterate to get the function calls
