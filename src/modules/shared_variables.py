@@ -1,3 +1,5 @@
+in_folder = './benchmarks/'
+
 ignored_folders = [
     '__pycache__',
     '.git',

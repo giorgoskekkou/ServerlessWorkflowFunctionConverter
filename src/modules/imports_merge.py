@@ -66,7 +66,8 @@ def main():
     #     for v in value:
     #         print(v)
     #     print()
-               
+
+    return imports, from_imports
 
 
 

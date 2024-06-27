@@ -68,32 +68,8 @@ def main():
 
                             if previous_function != '':
                                 functions_dictionary[previous_function]['end'] = index - 1
-                            # OLD
-                            # lambda_function + line.split(' ')[1].split('(')[0]
-                            # if new_func_name not in function_names:
-                            #     dictionary[lambda_function][name].append(new_func_name)
-                            #     function_names.append(new_func_name)
 
-                                # number_of_instances = len(functions_dictionary[new_func_name])
-                                # if number_of_instances == 0:
-                                #     functions_dictionary[new_func_name] = []
-                                # functions_dictionary[new_func_name].append({
-                                #     'directory': lambda_function,
-                                #     'start': index + 1,
-                                #     'end': -1,  # still unknown
-                                # })
-                            #     functions_dictionary[new_func_name] = {
-                            #         'directory': lambda_function,
-                            #         'function_name': get_function_name(lambda_function),
-                            #         'start': index + 1,
-                            #         'end': -1,  # still unknown
-                            #     }
-                            #     if previous_function != '':
-                            #         functions_dictionary[previous_function]['end'] = index - 1
-                            # else:
-                            #     print(f'Function {new_func_name} already exists')
-                            #     function_names
-                    else:
+                    else:   # executed if the loop ended normally (no break)   
                         functions_dictionary[new_func_name]['end'] = index
 
     print("Function names:")

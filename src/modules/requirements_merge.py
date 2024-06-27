@@ -2,9 +2,9 @@
 import os
 
 # File imports
-from shared_variables import ignored_folders
+from .shared_variables import ignored_folders, in_folder
 
-in_folder = './benchmarks/'
+# in_folder = './benchmarks/'
 
 # Functions
 def all_strings_same(strings):
@@ -82,7 +82,8 @@ def main():
     print("--------------------")
     
     print() 
-        
+
+    return new_requirements    
     # print("Type of requirements: ", type(requirements.values()))
     # Get the current working directory
     # cwd = os.getcwd()

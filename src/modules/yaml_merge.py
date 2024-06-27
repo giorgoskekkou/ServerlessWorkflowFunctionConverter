@@ -2,9 +2,9 @@ import os
 import yaml
 import datetime
 
-from shared_variables import ignored_folders
+from .shared_variables import ignored_folders, in_folder
 
-in_folder = './benchmarks/'
+# in_folder = './benchmarks/'
 
 def common_prefix(strings):
     return os.path.commonprefix(strings)
@@ -95,6 +95,8 @@ def main():
     print("Final Merged YAML: ")
     print(merged_yaml)
     print()
+
+    return merged_yaml
 
     # with open('temp.yaml', 'w') as file:
     #     yaml.dump(merged_yaml, file, default_flow_style=False, sort_keys=False)
