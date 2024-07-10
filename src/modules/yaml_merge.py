@@ -96,9 +96,10 @@ def main():
     print(merged_yaml)
     print()
 
-    return merged_yaml
 
-    # with open('temp.yaml', 'w') as file:
-    #     yaml.dump(merged_yaml, file, default_flow_style=False, sort_keys=False)
+    with open('temp.yaml', 'w') as file:
+        yaml.dump(merged_yaml, file, default_flow_style=False, sort_keys=False)
+    
+    return merged_yaml
 
 main()

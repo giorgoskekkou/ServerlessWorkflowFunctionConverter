@@ -1,5 +1,5 @@
-from function_merge import main as function_merge
-from request_converter import conv
+from .function_merge import main as function_merge
+from .request_converter import main as conv
 
 in_folder = './benchmarks/'
 
@@ -117,8 +117,8 @@ def main():
     print("Lambda functions: ", lambda_functions)
     print()
 
-    lambda_functions = ['video-streaming', 'video-decoder', 'video-recog']
-
+    # lambda_functions = ['video-streaming', 'video-decoder', 'video-recog'] # hardcoded for now
+    initial_function = lambda_functions[0] # hardcoded for now
     for lambda_function in lambda_functions:
         # buffer = ""
         with open(f'{in_folder}{lambda_function}/func.py') as f:
@@ -142,10 +142,24 @@ def main():
                 
                 # add prefix to the function definitions
                 for key, value in function_dictionary.items():
-                    if value['start'] == i + 1:
-                        # new_func_name = key.replace('-', '_')
-                        line = line.replace(value['function_name'], key.replace('-', '_'))
-                        print(line)
+                    skip_flag = False
+                    if value['directory'] == lambda_function and value['start'] == i + 1:
+                        if  value['function_name'] != 'main':
+                            # new_func_name = key.replace('-', '_')
+                            line = line.replace(value['function_name'], key.replace('-', '_'))
+                            print("--1--")
+                            print(line)
+                        elif value['function_name'] == 'main' and lambda_function != initial_function:
+                            print("--2--")
+                            print(f"Function: {lambda_function} at line {i + 1}")
+                            print(f"{lambda_function} - {initial_function}")
+                            print(f"function name: {value['function_name']} - {key}")
+                            i = value['end']
+                            skip_flag = True
+                            break
+                
+                if skip_flag:
+                    continue
 
                 # find the lambda function post request call
                 if 'requests.post' in line:
@@ -153,18 +167,26 @@ def main():
                     lambda_function_matches =  is_post_request(line, lambda_functions)
                     print(lambda_function_matches)
                     print()
+                    line = conv(line)
+                    
                     # print("Call conv")
                     # conv(lambda_functions, line)
                     # print('requests.post')
                 
                 buffer += line + '\n'
 
-    # TEMP print buffer
-    # print("THIS IS THE BUFFER: ")
-    # print(buffer)
+    # MLK
+    RED = '\033[91m'
+    END = '\033[0m'
 
-    with open('temp.txt', 'w') as f:
-        f.write(buffer)
+    # TEMP print buffer
+    print()
+    print(f"{RED}THIS IS THE BUFFER: {END}")
+    print(buffer)
+
+    return buffer
+    # with open('temp.txt', 'w') as f:
+    #     f.write(buffer)
 
 
 if __name__ == '__main__':

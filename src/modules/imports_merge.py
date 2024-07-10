@@ -45,11 +45,15 @@ def main():
     print("From Imports: ", from_imports)
     print()
 
+    total_imports = ''
     print("Start of the file (imports):")
     print("-----------------------------")
     for im in imports:
         print(im)
+        total_imports += im + '\n'
 
+    total_imports += '\n'
+    
     for key, value in from_imports.items():
         line = "from " + key + " import "
         for i, v in enumerate(value):
@@ -57,6 +61,7 @@ def main():
                 line += ", "
             line += v
         print(line)
+        total_imports += line + '\n'
     
     print("-----------------------------")
     print()
@@ -67,7 +72,7 @@ def main():
     #         print(v)
     #     print()
 
-    return imports, from_imports
+    return imports, from_imports, total_imports
 
 
 

@@ -6,6 +6,7 @@ from modules.shared_variables import in_folder
 from modules.requirements_merge import main as requirements_merge
 from modules.yaml_merge import main as yaml_merge
 from modules.imports_merge import main as imports_merge
+from modules.tree import main as tree
 
 # Global variables
 dictionary = {}
@@ -24,6 +25,10 @@ def main():
             lamda_functions.append(name)
             print(name)
     print()
+
+    print("Lambda functions: ")
+    print(lamda_functions)
+
 
     # Print the name of the files in each subdirectory
     for lamda_function in lamda_functions:
@@ -71,13 +76,24 @@ def main():
     print("Merged YAML:")
     print(merged_yaml)
 
-    imports, from_imports = imports_merge()
+    imports, from_imports, total_imports = imports_merge()
     print("Imports:")
     print(imports)
     print()
     print("From imports:")
     print(from_imports)
     print()
+
+    buffer = tree()
+
+    print("TOTAL IMPORTS:")
+    print(total_imports)
+
+    output = total_imports + buffer
+
+    with open('temp.py', 'w') as f:
+        # f.write(buffer)
+        f.write(output)
 
 if __name__ == '__main__':
     main()

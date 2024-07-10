@@ -11,7 +11,7 @@ def get_function_name(full_name):
     
     
 
-def main():
+def main(initial_function='video-streaming'):
     in_folder = './benchmarks/'
     dictionary = {}
 
@@ -91,7 +91,8 @@ def main():
     print()
 
     # set starting function
-    starting_function = 'video-streaming'   # hardcoded for now
+    # starting_function = 'video-streaming'   # hardcoded for now
+    starting_function = initial_function
     print(dictionary[starting_function])
 
     newly_called_function = ''
