@@ -56,7 +56,7 @@ def is_function_call(line, function_names):
 
 
 def main():
-    function_dictionary, lambda_functions = function_merge()
+    function_dictionary, lambda_functions, initial_function = function_merge()
 
     function_names = [function_dictionary[function]['function_name'] for function in function_dictionary]
 
@@ -118,7 +118,9 @@ def main():
     print()
 
     # lambda_functions = ['video-streaming', 'video-decoder', 'video-recog'] # hardcoded for now
-    initial_function = lambda_functions[0] # hardcoded for now
+    # initial_function = lambda_functions[0] # hardcoded for now
+    print("Initial function: ", initial_function)
+
     for lambda_function in lambda_functions:
         # buffer = ""
         with open(f'{in_folder}{lambda_function}/func.py') as f:
@@ -159,6 +161,7 @@ def main():
                             break
                 
                 if skip_flag:
+                    print("--SKIP--")
                     continue
 
                 # find the lambda function post request call

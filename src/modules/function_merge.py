@@ -28,6 +28,21 @@ def main(initial_function='video-streaming'):
             print(name)
     print()
 
+    # while True:
+    if True:
+        print("Choose the initial function:")
+
+        for i, lf in enumerate(lambda_functions):
+            print(f"{i+1}. {lf}")
+        print()
+        option = input("Enter the number of the initial function: ")
+        if option.isdigit() and 1 <= int(option) <= len(lambda_functions):
+            initial_function = lambda_functions[int(option)-1]
+            # break
+        else:
+            pass
+
+
     # Print the name of the files in each subdirectory
     for lambda_function in lambda_functions:
         print(f'Files in {lambda_function}:')
@@ -137,7 +152,7 @@ def main(initial_function='video-streaming'):
     print("-------------------")
 
     # TEMPORARY RETURN
-    return functions_dictionary, lambda_functions
+    return functions_dictionary, lambda_functions, initial_function
 
     # OLD CODE
     '''

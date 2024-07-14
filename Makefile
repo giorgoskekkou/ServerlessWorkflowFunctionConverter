@@ -29,7 +29,7 @@ conv:
 # 	$(PYTHON) src/in/function_call_stack.py
 
 tree:
-	$(PYTHON) -m src.modules.tree
+	$(PYTHON) -m src.modules.tree "video-streaming"
 
 count:
 	./count_lines.sh

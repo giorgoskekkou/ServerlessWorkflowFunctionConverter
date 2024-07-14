@@ -4,6 +4,7 @@
 # Directories
 __pycache__
 jsons
+poster
 
 # remove later
 video-*

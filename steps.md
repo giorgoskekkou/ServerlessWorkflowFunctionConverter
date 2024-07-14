@@ -51,3 +51,8 @@ kubectl delete --all namespaces
 
 
 /usr/local/bin/k3s-uninstall.sh
+
+macropod/tools/collection/metrics/metrics.go
+go run metrics.go enps3 out.csv
+
+kn func build --push=true

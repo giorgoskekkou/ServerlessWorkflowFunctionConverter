@@ -1,5 +1,6 @@
 # Library imports
 import os
+import sys
 
 # File imports
 from modules.shared_variables import in_folder
@@ -12,6 +13,13 @@ from modules.tree import main as tree
 dictionary = {}
 
 def main():
+    
+    # check for arguments
+    if len(sys.argv) > 1:
+        initial_function = sys.argv[1]
+    else:
+        initial_function = 'video-streaming'
+
     # print the current directory
     print('Current directory:', os.getcwd())
 
