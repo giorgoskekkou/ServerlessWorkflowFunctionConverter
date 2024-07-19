@@ -28,7 +28,20 @@ def main(initial_function='video-streaming'):
             print(name)
     print()
 
-    # while True:
+    while True:
+        print("Choose the initial function:")
+
+        for i, lf in enumerate(lambda_functions):
+            print(f"{i+1}. {lf}")
+        print()
+        option = input("Enter the number of the initial function: ")
+        if option.isdigit() and 1 <= int(option) <= len(lambda_functions):
+            initial_function = lambda_functions[int(option)-1]
+            break
+        else:
+            pass
+    
+    '''
     if True:
         print("Choose the initial function:")
 
@@ -41,7 +54,7 @@ def main(initial_function='video-streaming'):
             # break
         else:
             pass
-
+    '''
 
     # Print the name of the files in each subdirectory
     for lambda_function in lambda_functions:
@@ -115,8 +128,10 @@ def main(initial_function='video-streaming'):
     change_file_flag = True
     eof_flag = False
 
+    print(f'Starting function: {starting_function}')
+
     while not eof_flag:
-        print(f'Starting function: {starting_function}')
+        print(f'Current function: {starting_function}')
         if change_file_flag:
             with open(f'{in_folder}{starting_function}/func.py') as f:
                 code = f.read().split('\n')
@@ -146,10 +161,10 @@ def main(initial_function='video-streaming'):
                 else:   # executed if the loop ended normally (no break)
                     eof_flag = True
                 
-    print("Buffer:")
-    print("-------------------")
+    # print("Buffer:")
+    # print("-------------------")
     # print(buffer)
-    print("-------------------")
+    # print("-------------------")
 
     # TEMPORARY RETURN
     return functions_dictionary, lambda_functions, initial_function

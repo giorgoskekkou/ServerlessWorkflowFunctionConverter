@@ -71,7 +71,7 @@ def main():
 
 
     print("Function names: ", function_names)
-
+    function_called_by_main = {}
     for lambda_function in lambda_functions:
         with open(f'{in_folder}{lambda_function}/func.py') as f:
             code = f.read().split('\n')
@@ -101,6 +101,10 @@ def main():
                                 if function_matches[i] != el['function_name']:
                                     print(f"Function call: {el['function_name']} -> {function_matches[i]}")
                                     function_calls.append({'src': el['function_name'], 'dst': function_matches[i] , 'lambda': lambda_function, 'line': index + 1})
+                                    
+                            if el['function_name'] == 'main' and len(function_matches) == 1:
+                                function_called_by_main[lambda_function] = function_matches[0]
+
                                     # print(f"Function call: {function_names[i]}")
                                     # function_calls.append({'src': el['function_name'], 'dst': function_names[i] , 'lambda': lambda_function, 'line': index + 1})
                             # print(f"Function call: {function_name}")
@@ -130,9 +134,13 @@ def main():
             # for line in code:
                 # print(line)
             # print()
-            for i in range(len(code)):
+            i = 0
+            # n = len(code)
+            # for i in range(len(code)):
+            while i < len(code):
                 line = code[i]
                 if 'import' in line.split():
+                    i += 1
                     continue
                 
                 # add prefix to the function calls 
@@ -170,26 +178,31 @@ def main():
                     lambda_function_matches =  is_post_request(line, lambda_functions)
                     print(lambda_function_matches)
                     print()
-                    line = conv(line)
+                    line = conv(line, lambda_functions, function_called_by_main)
                     
                     # print("Call conv")
                     # conv(lambda_functions, line)
                     # print('requests.post')
-                
-                buffer += line + '\n'
+                elif 'partial(' in line:
+                    for key, value in function_dictionary.items():
+                        if value['directory'] == lambda_function:
+                            line = line.replace(value['function_name'], key.replace('-', '_'))
+                            print(line)
 
-    # MLK
+
+                buffer += line + '\n'
+                i += 1
+
+    # color codes
     RED = '\033[91m'
     END = '\033[0m'
 
-    # TEMP print buffer
+    # print buffer
     print()
     print(f"{RED}THIS IS THE BUFFER: {END}")
     print(buffer)
 
     return buffer
-    # with open('temp.txt', 'w') as f:
-    #     f.write(buffer)
 
 
 if __name__ == '__main__':

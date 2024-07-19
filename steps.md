@@ -55,4 +55,14 @@ kubectl delete --all namespaces
 macropod/tools/collection/metrics/metrics.go
 go run metrics.go enps3 out.csv
 
-kn func build --push=true
+# first time build
+kn func build --push=true  
+
+# DEPLOY
+kn func deploy --build=true --push=true
+ 
+# TEST
+curl -H "Content-Type: application/json" -d "{}" http://video-all.default.10.0.2.15.sslip.io
+
+# create function
+func create -l python function-name
