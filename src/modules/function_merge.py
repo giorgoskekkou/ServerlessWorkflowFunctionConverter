@@ -9,7 +9,23 @@ def get_function_name(full_name):
     without_first_prefix = parts[1:]
     return '_'.join(without_first_prefix)
     
-    
+def get_function_paramaters(line):
+    buffer = ''
+    flag = False
+    for char in line:
+        if char == ')':
+            break
+        elif char == '(':
+            flag = True
+            continue 
+        elif flag:
+            buffer += char
+
+    print("\n000000000000000")
+    print("BEF: ", buffer)
+    print("AFT: ", buffer.split(','))
+    print("000000000000000\n")
+    return buffer.strip().split(',')
 
 def main(initial_function='video-streaming'):
     in_folder = './benchmarks/'
@@ -92,7 +108,9 @@ def main(initial_function='video-streaming'):
                                 'function_name': get_function_name(new_func_name),
                                 'start': index + 1,
                                 'end': -1,  # still unknown
+                                'parameters': get_function_paramaters(line)
                             }
+
 
                             if previous_function != '':
                                 functions_dictionary[previous_function]['end'] = index - 1

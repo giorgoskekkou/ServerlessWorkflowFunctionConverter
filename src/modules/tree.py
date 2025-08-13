@@ -21,8 +21,6 @@ def tokenize_line(line: str):
             buffer += char
     return tokens
 
-
-
 def remove_duplicates(l: list):
     new_l = []
     for item in l:
@@ -54,6 +52,107 @@ def is_function_call(line, function_names):
     return remove_duplicates(function_matches)
     # return function_matches
 
+def str_in_params(str_pattern, params):
+    for index, param in enumerate(params):
+        if str_pattern in param:
+            return index
+    return None
+
+def remove_parameters(line, params):
+    print("PARAMS: ", params)
+    # return line.replace("workflow_id", "workflow_id=''").replace("workflow_depth", "workflow_depth=''")
+    # OLD
+    
+    buffer = ''
+    flag = -1    # -1 : before, 0 : during, 1 : after
+    write_flag = False
+    
+    print("Line: ", line)
+    print("Params: ", params)
+
+
+    for char in line:
+        if char == '(':
+            buffer += char
+            flag = 0
+        elif char == ')':
+            # buffer += char
+            # flag = True
+            flag = 1
+            
+
+        if flag == -1:
+            buffer += char
+        elif flag == 0 and not write_flag:
+            buffer += ','.join(params)
+            write_flag = True
+        elif flag == 1:
+            buffer += char
+        
+            # line += ','.join(params)
+    return buffer
+
+def remove_arguments(line):
+    buffer = ''
+    arguments = ''
+    flag = -1    # -1 : before, 0 : during, 1 : after
+    
+    print("Line: ")
+    print("BEFORE: ", line)
+
+
+    for char in line:
+        if char == '(':
+            if flag == -1:
+                buffer += char
+                flag = 0
+                continue
+            else:
+                return line
+        elif char == ')':
+            # buffer += char
+            # flag = True
+            # list_of_arguments = arguments.split(',')    
+            # Remove arguments
+            # for arg in list_of_arguments:
+            #     if 'workflow' in arg:
+            #         list_of_arguments.remove(arg)
+            if flag == 0:
+                list_of_arguments = arguments.split(',')
+                # Create a new list excluding arguments that contain 'workflow'
+                list_of_arguments = [arg for arg in list_of_arguments if 'workflow' not in arg]
+                
+                buffer += ','.join(list_of_arguments)
+                flag = 1
+            else:
+                return line            
+
+        if flag == -1:
+            buffer += char
+        elif flag == 0:
+            arguments += char
+        elif flag == 1:
+            buffer += char
+    
+    print("-________________-")
+    print("Arguments: ", arguments)
+    print("Split: ", arguments.split(','))
+    print("-________________-")
+
+    # list_of_arguments = arguments.split(',')    
+    # # Remove arguments
+    # for arg in list_of_arguments:
+    #     if 'workflow' in arg:
+    #         list_of_arguments.remove(arg)
+    
+    print("AFTER: ", buffer)
+
+    return buffer
+
+def check_line(line):
+    if 'workflow' in line:
+        return False
+    return True
 
 def main():
     function_dictionary, lambda_functions, initial_function = function_merge()
@@ -71,6 +170,8 @@ def main():
 
 
     print("Function names: ", function_names)
+
+    new_function_calls = {}
     function_called_by_main = {}
     for lambda_function in lambda_functions:
         with open(f'{in_folder}{lambda_function}/func.py') as f:
@@ -101,6 +202,11 @@ def main():
                                 if function_matches[i] != el['function_name']:
                                     print(f"Function call: {el['function_name']} -> {function_matches[i]}")
                                     function_calls.append({'src': el['function_name'], 'dst': function_matches[i] , 'lambda': lambda_function, 'line': index + 1})
+
+                                    # Remove arguments from the function call
+                                    # code[i] = remove_arguments(line)
+                                    new_function_calls[index] = remove_arguments(line)
+                                    # line = remove_arguments(line)
                                     
                             if el['function_name'] == 'main' and len(function_matches) == 1:
                                 function_called_by_main[lambda_function] = function_matches[0]
@@ -148,6 +254,7 @@ def main():
                     if function_call['line'] == i + 1 and function_call['lambda'] == lambda_function:
                         new_func_name = f"{function_call['lambda'].replace('-', '_')}_{function_call['dst']}"
                         line = line.replace(function_call['dst'], new_func_name)
+                        
                         print(line)
                 
                 # add prefix to the function definitions
@@ -159,6 +266,37 @@ def main():
                             line = line.replace(value['function_name'], key.replace('-', '_'))
                             print("--1--")
                             print(line)
+
+                            remove_flag = False
+                            # remove workflow parameters
+                            # if 'workflow_id' in value['parameters']:
+                            # if str_in_params('workflow_id', value['parameters']):
+                            returned_index = str_in_params('workflow_id', value['parameters'])
+                            if returned_index is not None:
+                                value['parameters'].pop(returned_index)
+                                # value['parameters'].remove('workflow_id')
+                                remove_flag = True
+
+                            # if 'workflow_depth' in value['parameters']:
+                            # if str_in_params('workflow_depth', value['parameters']):
+                            returned_index = str_in_params('workflow_depth', value['parameters'])
+                            if returned_index is not None:
+                                # value['parameters'].remove('workflow_depth')
+                                value['parameters'].pop(returned_index)
+                                remove_flag = True
+                            
+                            
+                            if remove_flag:
+                                print("New parameters: ", value['parameters'])
+                                print("\n88888888888")
+                                print("BEF: ", line)
+                                line = remove_parameters(line, value['parameters'])
+                                print("AFT: ", line)
+                                print("88888888888\n")
+
+                            print("-1.5--")
+                            print(line)
+
                         elif value['function_name'] == 'main' and lambda_function != initial_function:
                             print("--2--")
                             print(f"Function: {lambda_function} at line {i + 1}")
@@ -167,6 +305,7 @@ def main():
                             i = value['end']
                             skip_flag = True
                             break
+                        
                 
                 if skip_flag:
                     print("--SKIP--")
